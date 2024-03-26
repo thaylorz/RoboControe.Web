@@ -15,12 +15,12 @@ function Navbar() {
                     <ul className='flex'>
                         {auth?.userId
                             ? (
-                                <li className='mx-3'><a onClick={signOut} className='bg-red-500 text-white border py-2 px-3 rounded-md text-lg my-2'>Sign out</a></li>
+                                <li className='mx-3'><a onClick={signOut} className='bg-red-500 text-white border py-2 px-3 rounded-md text-lg my-2'>Sair</a></li>
                             )
                             : (
                                 <>
-                                    <li className='mx-3'><Link href="/login">Sign In</Link></li>
-                                    <li className='mx-3'><Link href="/register">Sign up</Link></li>
+                                    <li className='mx-3'><Link href="/login">Entrar</Link></li>
+                                    <li className='mx-3'><Link href="/register">Registrar</Link></li>
                                 </>
                             )}
                     </ul>
