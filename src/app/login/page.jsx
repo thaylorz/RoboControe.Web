@@ -1,24 +1,25 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import Navbar from '../components/Navbar';
-import { useRouter } from 'next/navigation'
 import axios from '../api/axios';
-import useAuth from '../hooks/useAuth';
+import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify';
 
-const LOGIN_URL = '/users/login';
+const REGISTER_URL = '/users/register';
 
-function LoginPage() {
-    const { setAuth } = useAuth();
-
-    const router = useRouter()
+function RegisterPage() {
     const userRef = useRef();
-    const errRef = useRef();
+    const router = useRouter();
 
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState('');
     const [errMsg, setErrMsg] = useState('');
+    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         userRef.current.focus();
@@ -26,26 +27,32 @@ function LoginPage() {
 
     useEffect(() => {
         setErrMsg('');
-    }, [email, password])
+    }, [firstName, lastName, email, password, confirmPassword])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (password !== confirmPassword) {
+            setError('Passwords do not match');
+            return;
+        }
+
         try {
-            const response = await axios.post(LOGIN_URL,
-                JSON.stringify({ email, password }), {
-                headers: { 'Content-Type': 'application/json' },
-            });
+            const response = await axios.post(REGISTER_URL,
+                JSON.stringify({ firstName, lastName, email, password }),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                });
 
-            const accessToken = response?.data?.token;
-            const userId = response?.data?.userId;
-            const userEmail = response?.data?.email;
-
-            setAuth({ userId, password, userEmail, accessToken });
+            setSuccess(true);
+            setFirstName('');
+            setLastName('');
             setEmail('');
             setPassword('');
+            setConfirmPassword('');
 
-            router.push('/robots');
+            router.push('/login');
         } catch (error) {
             if (typeof error.response.data.errors === 'object') {
                 const { errors } = error.response.data;
@@ -69,21 +76,75 @@ function LoginPage() {
         <div>
             <Navbar />
             <div className='container max-auto py-5'>
-                <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                <h3>Entrar</h3>
+                <h3>Cadastro</h3>
                 <hr className='my-3' />
                 <form onSubmit={handleSubmit}>
-                    <input required value={email} ref={userRef} autoComplete="off" onChange={(e) => setEmail(e.target.value)} className='block bg-gray-300 p-2 my-2 rounded-md ' placeholder="Email" type="email" name="email" id="email" />
-                    <input required value={password} onChange={(e) => setPassword(e.target.value)} className='block bg-gray-300 p-2 my-2 rounded-md ' placeholder="Senha" type="password" name="password" id="password" />
-                    <button type="submit" className='bg-green-500 p-2 rounded-md text-white'>Entrar</button>
+                    {error && <div className='bg-red-500 text-white p-2 my-2 rounded-md'>{error}</div>}
+
+                    <input
+                        onChange={(e) => setFirstName(e.target.value)}
+                        ref={userRef}
+                        required
+                        className='block bg-gray-300 p-2 my-2 rounded-md'
+                        placeholder='Primeiro nome'
+                        type="text"
+                        name="name"
+                        id="name"
+                    />
+
+                    <input
+                        onChange={(e) => setLastName(e.target.value)}
+                        required
+                        className='block bg-gray-300 p-2 my-2 rounded-md'
+                        placeholder='Ultimo nome'
+                        type="text"
+                        name="lastName"
+                        id="lastName"
+                    />
+
+                    <input
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className='block bg-gray-300 p-2 my-2 rounded-md '
+                        placeholder="Email"
+                        type="email"
+                        name="email"
+                        id="email"
+                    />
+
+                    <input
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        className='block bg-gray-300 p-2 my-2 rounded-md '
+                        placeholder="Senha"
+                        type="password"
+                        name="password"
+                        id="password"
+                    />
+
+                    <input
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                        className='block bg-gray-300 p-2 my-2 rounded-md '
+                        placeholder="Confirmar senha"
+                        type="password"
+                        name="confirmPassword"
+                        id="confirmPassword"
+                    />
+
+                    <button
+                        type="submit"
+                        className='bg-green-500 p-2 rounded-md text-white'>
+                        Registrar
+                    </button>
                 </form>
                 <hr className='my-3' />
                 <div>
-                    <p>Não tem uma conta? <a href="/register" className='text-blue-500 hover:underline'>registre-se</a></p>
+                    <p>Já possui uma conta? <a href="/login" className='text-blue-500 hover:underline'>Entrar</a></p>
                 </div>
             </div>
         </div>
     )
 }
 
-export default LoginPage
+export default RegisterPage
