@@ -70,16 +70,16 @@ function LoginPage() {
             <Navbar />
             <div className='container max-auto py-5'>
                 <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
-                <h3>Sign In</h3>
+                <h3>Entrar</h3>
                 <hr className='my-3' />
                 <form onSubmit={handleSubmit}>
                     <input required value={email} ref={userRef} autoComplete="off" onChange={(e) => setEmail(e.target.value)} className='block bg-gray-300 p-2 my-2 rounded-md ' placeholder="Email" type="email" name="email" id="email" />
-                    <input required value={password} onChange={(e) => setPassword(e.target.value)} className='block bg-gray-300 p-2 my-2 rounded-md ' placeholder="Password" type="password" name="password" id="password" />
-                    <button type="submit" className='bg-green-500 p-2 rounded-md text-white'>Sign In</button>
+                    <input required value={password} onChange={(e) => setPassword(e.target.value)} className='block bg-gray-300 p-2 my-2 rounded-md ' placeholder="Senha" type="password" name="password" id="password" />
+                    <button type="submit" className='bg-green-500 p-2 rounded-md text-white'>Entrar</button>
                 </form>
                 <hr className='my-3' />
                 <div>
-                    <p>Don&apos;t have an account? <a href="/register" className='text-blue-500 hover:underline'>Sign up</a></p>
+                    <p>Não tem uma conta? <a href="/register" className='text-blue-500 hover:underline'>registre-se</a></p>
                 </div>
             </div>
         </div>
