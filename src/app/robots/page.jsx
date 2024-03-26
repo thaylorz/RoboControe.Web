@@ -81,18 +81,18 @@ function Dashboard() {
         <div>
             <Navbar />
             <div className='container mx-auto'>
-                <h3 className='text-3x1 my-3'>Dashboard</h3>
+                <h3 className='text-3x1 my-3'>Meus robôs</h3>
                 <hr className='my-3' />
                 <div className="flex items-center justify-between py-2">
                     <input
                         value={newRobotName}
                         onChange={(e) => setNewRobotName(e.target.value)}
                         className='block bg-gray-300 p-2 my-2 rounded-md '
-                        placeholder="Enter robot name"
+                        placeholder="Nome do robô"
                         type="text"
                         name="newRobotName"
                     />
-                    <button onClick={handleAddRobot} className='bg-green-500 p-2 rounded-md text-white'>Add Robot</button>
+                    <button onClick={handleAddRobot} className='bg-green-500 p-2 rounded-md text-white'>Adicionar</button>
                 </div>
                 <ul>
                     {robots.map(robot => (
